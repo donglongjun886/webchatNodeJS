@@ -1,0 +1,25 @@
+{
+  "name": "webchatnodejs",
+  "version": "1.0.0",
+  "description": "微信公众号nodeJS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/longlongagocsu/webchatNodeJS.git"
+  },
+  "author": "kimi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/longlongagocsu/webchatNodeJS/issues"
+  },
+  "homepage": "https://github.com/longlongagocsu/webchatNodeJS#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "wechat": "^2.1.0",
+    "wechat-api": "^1.35.1",
+    "wechat-oauth": "^1.5.0"
+  }
+}
