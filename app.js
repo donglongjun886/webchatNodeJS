@@ -44,3 +44,5 @@ app.use('/wechat', wechat(config, function (req, res, next) {
     ]);
   }
 }));
+
+app.listen(80, () => console.log('Example app listening on port 80!'));

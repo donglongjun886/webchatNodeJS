@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/longlongagocsu/webchatNodeJS#readme",
   "dependencies": {
+    "crypto": "^1.0.1",
     "express": "^4.16.4",
     "wechat": "^2.1.0",
     "wechat-api": "^1.35.1",
