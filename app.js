@@ -21,7 +21,6 @@ var config = {
 const app = express()
 var access_token = null;
 app.get('/wechat', (req,res)=>{
-    console.log('/wechat'+JSON.parse(req.query));
     var cryptor = new WXBizMsgCrypt(config.token, config.encodingAESKey, config.appid);
     // 加密模式
     var signature = req.query.signature;
