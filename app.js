@@ -30,16 +30,11 @@ app.get('/wechat', (req,res)=>{
     var echostr = req.query.echostr;
     var str = [config.token, timestamp, nonce].sort().join('')
     var sha = sha1(str)
-    if (signature !== sha) {
-        res.writeHead(401);
-        res.end('Invalid signature');
-        return;
+    if (sha === signature) {
+        res.send(echostr + '');
+    } else {
+        res.send('');
     }
-    var result = cryptor.decrypt(echostr);
-    // TODO 检查appId的正确性
-    res.writeHead(200);
-    res.end(result.message);
-
 });
 
 var sha1 = function (str){
