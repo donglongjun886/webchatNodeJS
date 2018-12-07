@@ -27,7 +27,7 @@ app.get('/wechat', (req,res)=>{
     var timestamp = req.query.timestamp;
     var nonce = req.query.nonce;
     var echostr = req.query.echostr;
-    var str = [token, timestamp, nonce].sort().join('')
+    var str = [config.token, timestamp, nonce].sort().join('')
     var sha = sha1(str)
     console.log('echostr='+echostr+',signature='+signature+',cryptor.getSignature='+cryptor.getSignature(timestamp, nonce, echostr)+',sha1='+sha);
     if (signature !== cryptor.getSignature(timestamp, nonce, echostr)) {
