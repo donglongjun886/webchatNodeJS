@@ -24,7 +24,7 @@ app.get('/wechat', (req,res)=>{
     console.log('/wechat');
     var cryptor = new WXBizMsgCrypt(config.token, config.encodingAESKey, config.appid);
     // 加密模式
-    var signature = req.query.msg_signature;
+    var signature = req.query.signature;
     var timestamp = req.query.timestamp;
     var nonce = req.query.nonce;
     var echostr = req.query.echostr;
