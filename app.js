@@ -2,6 +2,7 @@ var express = require('express');
 var mysql = require('mysql');
 var axios = require('axios');
 var WXBizMsgCrypt = require('wechat-crypto');
+var crypto = require('crypto');
 
 var connection = mysql.createConnection({
     host : '47.110.90.203',
