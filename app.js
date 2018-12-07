@@ -24,9 +24,6 @@ var access_token = null;
 app.get('/wechat', (req,res)=>{
     console.log('/wechat');
     var cryptor = new WXBizMsgCrypt(config.token, config.encodingAESKey, config.appid);
-    var query = cryptor.decrypt(req);
-    console.log('req.query:'+req.query);
-    var token = config.token;
     var signature = req.query.signature;
     var nonce = req.query.nonce;
     var timestamp = req.query.timestamp;
