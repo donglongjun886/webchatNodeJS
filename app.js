@@ -30,8 +30,7 @@ app.get('/wechat', (req,res)=>{
     var echostr = req.query.echostr;
     var str = [config.token, timestamp, nonce].sort().join('')
     var sha = sha1(str)
-    console.log('echostr='+echostr+',signature='+signature+',cryptor.getSignature='+cryptor.getSignature(timestamp, nonce, echostr)+',sha1='+sha);
-    if (signature !== cryptor.getSignature(timestamp, nonce, echostr)) {
+    if (signature !== sha) {
         res.writeHead(401);
         res.end('Invalid signature');
         return;
