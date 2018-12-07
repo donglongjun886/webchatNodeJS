@@ -1,48 +1,81 @@
 var express = require('express');
 var wechat = require('wechat');
+var mysql = require('mysql');
+var axios = require('axios');
+
+var connection = mysql.createConnection({
+    host : '47.110.90.203',
+    user : 'root',
+    password : 'Kimi-886',
+    port : '3306'
+});
+
 var config = {
-  token: 'helloToken',
-  appid: 'wx16cbe02f1acf411e',
-  encodingAESKey: 'UsuzoGJHj8W7MQXcFuYVMg0n88SwknAfA7OAwMAPJUh',
-  checkSignature: true // 可选，默认为true。由于微信公众平台接口调试工具在明文模式下不发送签名，所以如要使用该测试工具，请将其设置为false
+    token: 'helloToken',
+    appid: 'wx16cbe02f1acf411e',
+    secret: 'f7d67453e34f3c887e0685fe1ff6064d',
+    encodingAESKey: 'UsuzoGJHj8W7MQXcFuYVMg0n88SwknAfA7OAwMAPJUh',
+    checkSignature: false // 可选，默认为true。由于微信公众平台接口调试工具在明文模式下不发送签名，所以如要使用该测试工具，请将其设置为false
 };
+
 const app = express()
+var access_token = null;
 app.use(express.query());
 app.use('/wechat', wechat(config, function (req, res, next) {
-  // 微信输入信息都在req.weixin上
-  var message = req.weixin;
-  if (message.FromUserName === 'diaosi') {
-    // 回复屌丝(普通回复)
-    res.reply('hehe');
-  } else if (message.FromUserName === 'text') {
-    //你也可以这样回复text类型的信息
-    res.reply({
-      content: 'text object',
-      type: 'text'
-    });
-  } else if (message.FromUserName === 'hehe') {
-    // 回复一段音乐
-    res.reply({
-      type: "music",
-      content: {
-        title: "来段音乐吧",
-        description: "一无所有",
-        musicUrl: "http://mp3.com/xx.mp3",
-        hqMusicUrl: "http://mp3.com/xx.mp3",
-        thumbMediaId: "thisThumbMediaId"
-      }
-    });
-  } else {
-    // 回复高富帅(图文回复)
-    res.reply([
-      {
-        title: '你来我家接我吧',
-        description: '这是女神与高富帅之间的对话',
-        picurl: 'http://nodeapi.cloudfoundry.com/qrcode.jpg',
-        url: 'http://nodeapi.cloudfoundry.com/'
-      }
-    ]);
-  }
+    if (access_token == null){
+        access_token = getToken(config);
+    }
+    main();
 }));
 
-app.listen(80, () => console.log('Example app listening on port 80!'));
+var main = function(){
+    console.info('main function')
+}
+
+
+var queryToken = function(config){
+    console.log('start queryToken');
+    var tokenUrl = 'https://api.weixin.qq.com/cgi-bin/token';
+    axios.get(tokenUrl,{
+        params:{
+            grant_type:'client_credential',
+            appid:config.appid,
+            secret:config.secret
+        }
+    }).then((userinfo)=>{
+        console.log('userinfo.data.access_token:'+userinfo.data.access_token);
+        var access_token = userinfo.data.access_token ;
+        saveToken(userinfo.data);
+    });
+}
+
+var getToken = function(config){
+    console.log('start getToken');
+    var sql = 'SELECT * FROM token WHERE openid = ?';
+    connection.query(sql, null, function (err, result) {
+        if(err) {
+            return console.error('err:'+err);
+        }
+        if (result==null || result.size==0){
+            queryToken(config)
+        }
+        access_token = result[0];
+    });
+}
+
+var saveToken = function(token){
+    console.log('start saveToken');
+    var sql = 'REPLACE INTO token(access_token, expires_in, create_at) VALUES(?, ?, ?)';
+    var fields = [token.access_token, token.expires_in, Date.now()];
+    connection.query(sql, fields, function (err, result) {
+        if (err){
+            return console.error(err);
+        }
+        access_token = result[0];
+        main();
+    });
+}
+
+
+
+app.listen(3000, () => console.log('Example app listening on port 80!'));
