@@ -1,5 +1,5 @@
 var express = require('express');
-var wechat = require('wechat');
+var crypto = require('crypto');
 var mysql = require('mysql');
 var axios = require('axios');
 
@@ -20,13 +20,28 @@ var config = {
 
 const app = express()
 var access_token = null;
-app.use(express.query());
-app.use('/wechat', wechat(config, function (req, res, next) {
-    if (access_token == null){
-        access_token = getToken(config);
+app.get('/wechat', (req,res)=>{
+    console.log('req.query:'+req.query);
+    var token = config.token
+    var signature = req.query.signature
+    var nonce = req.query.nonce
+    var timestamp = req.query.timestamp
+    var echostr = req.query.echostr
+    var str = [token, timestamp, nonce].sort().join('')
+    var sha = sha1(str)
+
+    if (sha === signature) {
+        res.send(echostr + '');
+    } else {
+        res.send('');
     }
-    main();
-}));
+
+});
+
+var sha1 = function (str){
+    var shasum = crypto.createHash('sha1');
+    return shasum.update(str).digest('hex');
+}
 
 var main = function(){
     console.info('main function')
@@ -78,4 +93,4 @@ var saveToken = function(token){
 
 
 
-app.listen(80, () => console.log('Example app listening on port 80!'));
+app.listen(3000, () => console.log('Example app listening on port 80!'));
