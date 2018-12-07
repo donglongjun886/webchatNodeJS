@@ -21,14 +21,16 @@ var config = {
 const app = express()
 var access_token = null;
 app.get('/wechat', (req,res)=>{
-    console.log('/wechat');
+    console.log('/wechat'+JSON.parse(req.query));
     var cryptor = new WXBizMsgCrypt(config.token, config.encodingAESKey, config.appid);
     // 加密模式
     var signature = req.query.signature;
     var timestamp = req.query.timestamp;
     var nonce = req.query.nonce;
     var echostr = req.query.echostr;
-    console.log('echostr='+echostr+',signature='+signature+',cryptor.getSignature='+cryptor.getSignature(timestamp, nonce, echostr));
+    var str = [token, timestamp, nonce].sort().join('')
+    var sha = sha1(str)
+    console.log('echostr='+echostr+',signature='+signature+',cryptor.getSignature='+cryptor.getSignature(timestamp, nonce, echostr)+',sha1='+sha);
     if (signature !== cryptor.getSignature(timestamp, nonce, echostr)) {
         res.writeHead(401);
         res.end('Invalid signature');
