@@ -4,3 +4,4 @@ example
 coverage
 *.iml
 .idea
+package-lock.json
