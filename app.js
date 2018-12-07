@@ -2,6 +2,7 @@ var express = require('express');
 var crypto = require('crypto');
 var mysql = require('mysql');
 var axios = require('axios');
+var WXBizMsgCrypt = require('wechat-crypto');
 
 var connection = mysql.createConnection({
     host : '47.110.90.203',
@@ -15,26 +16,30 @@ var config = {
     appid: 'wx16cbe02f1acf411e',
     secret: 'f7d67453e34f3c887e0685fe1ff6064d',
     encodingAESKey: 'UsuzoGJHj8W7MQXcFuYVMg0n88SwknAfA7OAwMAPJUh',
-    checkSignature: false // 可选，默认为true。由于微信公众平台接口调试工具在明文模式下不发送签名，所以如要使用该测试工具，请将其设置为false
+    checkSignature: true // 可选，默认为true。由于微信公众平台接口调试工具在明文模式下不发送签名，所以如要使用该测试工具，请将其设置为false
 };
 
 const app = express()
 var access_token = null;
 app.get('/wechat', (req,res)=>{
+    console.log('/wechat');
+    var cryptor = new WXBizMsgCrypt(config.token, config.encodingAESKey, config.appid);
+    var query = cryptor.decrypt(req);
     console.log('req.query:'+req.query);
-    var token = config.token
-    var signature = req.query.signature
-    var nonce = req.query.nonce
-    var timestamp = req.query.timestamp
-    var echostr = req.query.echostr
-    var str = [token, timestamp, nonce].sort().join('')
-    var sha = sha1(str)
-
-    if (sha === signature) {
-        res.send(echostr + '');
-    } else {
-        res.send('');
+    var token = config.token;
+    var signature = req.query.signature;
+    var nonce = req.query.nonce;
+    var timestamp = req.query.timestamp;
+    var echostr = req.query.echostr;
+    if (signature !== cryptor.getSignature(timestamp, nonce, echostr)) {
+        res.writeHead(401);
+        res.end('Invalid signature');
+        return;
     }
+    var result = cryptor.decrypt(echostr);
+    // TODO 检查appId的正确性
+    res.writeHead(200);
+    res.end(result.message);
 
 });
 
