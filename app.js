@@ -1,5 +1,4 @@
 var express = require('express');
-var crypto = require('crypto');
 var mysql = require('mysql');
 var axios = require('axios');
 var WXBizMsgCrypt = require('wechat-crypto');
@@ -24,10 +23,12 @@ var access_token = null;
 app.get('/wechat', (req,res)=>{
     console.log('/wechat');
     var cryptor = new WXBizMsgCrypt(config.token, config.encodingAESKey, config.appid);
-    var signature = req.query.signature;
-    var nonce = req.query.nonce;
+    // 加密模式
+    var signature = req.query.msg_signature;
     var timestamp = req.query.timestamp;
+    var nonce = req.query.nonce;
     var echostr = req.query.echostr;
+    console.log('echostr='+echostr+',signature='+signature+',cryptor.getSignature='+cryptor.getSignature(timestamp, nonce, echostr));
     if (signature !== cryptor.getSignature(timestamp, nonce, echostr)) {
         res.writeHead(401);
         res.end('Invalid signature');
