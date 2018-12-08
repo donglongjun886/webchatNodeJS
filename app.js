@@ -3,6 +3,7 @@ var mysql = require('mysql');
 var axios = require('axios');
 var WXBizMsgCrypt = require('wechat-crypto');
 var crypto = require('crypto');
+var menu = require('./menu');
 
 var connection = mysql.createConnection({
     host : '47.110.90.203',
@@ -65,8 +66,13 @@ app.get('/wechat', (req,res)=>{
     })
 });
 
+app.get('/reserverView',function(req,res){
+    res.send('reserverView');
+});
+
 var main = function(req,res){
     console.info('main function access_token='+access_token);
+    menu.createMenu(access_token);
     res.send('success');
 }
 
