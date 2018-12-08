@@ -66,7 +66,7 @@ app.get('/wechat', (req,res)=>{
     })
 });
 
-app.get('/reserverView',function(req,res){
+app.get('/arriveReserver',function(req,res){
     res.send('reserverView');
 });
 
