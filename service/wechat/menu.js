@@ -1,6 +1,5 @@
 var axios = require('axios');
-
-var createMenuUrl = 'https://api.weixin.qq.com/cgi-bin/menu/create';
+var $wechatConfig = require('../wechat/config');
 
 function createMenu(access_token){
     var menu = {
@@ -42,7 +41,7 @@ function createMenu(access_token){
             }
         ]
     }
-    var url = createMenuUrl + '?access_token='+access_token;
+    var url = $wechatConfig.config.createMenuUrl + '?access_token='+access_token;
     axios.post( url ,menu,{
         headers:{
             'content-type':'application/x-www-form-urlencoded'
