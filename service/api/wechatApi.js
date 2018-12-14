@@ -17,6 +17,7 @@ var access_token = null;
 router.get('/',(req,res) => {
   console.log('start query');
   var selectSql = $sql.token.select;
+  var hasCreateMenu =false;
   conn.query(selectSql,null,function(err,result){
     if (err) {
       console.log(err);
@@ -38,12 +39,20 @@ router.get('/',(req,res) => {
           // 保存token
           token.saveToken(conn,data);
           access_token = data.access_token;
+          if (access_token || !hasCreateMenu) {
+            menu.createMenu(access_token);
+            hasCreateMenu = true;
+          }
+          return;
       });
     }else{
       console.log('mysql query success');
       access_token = result[0].access_token;
     }
-    menu.createMenu(access_token);
+    if (access_token || !hasCreateMenu) {
+      menu.createMenu(access_token);
+      hasCreateMenu = true;
+    }
     res.send('success');
   })
 });
