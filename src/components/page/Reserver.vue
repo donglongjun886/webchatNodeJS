@@ -1,6 +1,5 @@
 <template>
   <el-container>
-    <el-header>Header</el-header>
     <el-main>
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
         <el-form-item label="姓名" prop="user_name">

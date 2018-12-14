@@ -12,7 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/wechat': {
-        target: 'http://127.0.0.1:3000/wechat/',
+        target: 'http://47.110.90.203:3000/wechat/',
         changeOrigin: true,
         pathRewrite: {
           '^/wechat': ''
