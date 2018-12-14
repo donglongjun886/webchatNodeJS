@@ -10,5 +10,5 @@ app.use(bodyParser.urlencoded())
 
 app.use('/wechat', wechatApi);
 
-app.listen(80);
-console.log('success listen at port: 80')
+app.listen(3000);
+console.log('success listen at port: 3000')

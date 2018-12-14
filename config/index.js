@@ -10,7 +10,15 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      '/wechat': {
+        target: 'http://127.0.0.1:3000/wechat/',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/wechat': ''
+        }
+      }
+    },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
