@@ -10,7 +10,7 @@ function createMenu(access_token){
                     {
                         "type" : "view",
                         "name" : "预约到店",
-                        "url"  : "http://47.110.90.203/arriveReserver"
+                        "url"  : "http://47.110.90.203/"
                     },
                     {
                         "type" : "click",
