@@ -20,6 +20,7 @@ router.get('/',(req,res) => {
   console.log(req.query);
   console.log('req.body=');
   console.log(req.body);
+  var selectSql = $sql.token.select;
   conn.query(selectSql,null,function(err,result){
     if (err) {
       console.log(err);
