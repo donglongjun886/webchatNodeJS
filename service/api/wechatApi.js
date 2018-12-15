@@ -16,6 +16,10 @@ var access_token = null;
 
 router.get('/',(req,res) => {
   console.log('start query');
+  console.log('req.query=');
+  console.log(req.query);
+  console.log('req.body=');
+  console.log(req.body);
   var selectSql = $sql.token.select;
   var hasCreateMenu =false;
   conn.query(selectSql,null,function(err,result){
