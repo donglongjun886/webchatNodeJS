@@ -27,7 +27,7 @@ router.get('/createMenu',(req,res) => {
       console.log(err);
     }
     // 查询不到token或者token过期
-    if (result == undefined || result == null || result.size == 0 || tokenValidate.expireValidate(result[0])){
+    if (result == null  || tokenValidate.expireValidate(result[0])){
       console.log('expire');
       // 删除原有token
       token.deleteExpireToken(conn,result);

@@ -4,9 +4,9 @@ var expireValidate = function(tokenData){
     }
     var create_at = tokenData.create_at;
     var expires_in = tokenData.expires_in;
-    var expireTime = create_at+expires_in*1000;
-    var now = Date.now();
-    if (now<expireTime){
+    var expireTime = new Date(create_at+expires_in*1000);
+    var now = new Date();
+    if (now>expireTime){
         return true
     }else{
         return false;

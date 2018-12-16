@@ -1,7 +1,8 @@
 var $sql = require('../db/sqlMap');
 
 var deleteExpireToken = function(conn,result){
-  if(result != undefined && result != null && result.size > 0){
+  if(result){
+    console.log('start delete toekn');
     conn.query($sql.token.delete,function(err,result){
         if (err){
           console.log('[DELETE ERRO]-'+err);
