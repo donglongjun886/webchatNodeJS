@@ -15,7 +15,7 @@ var conn = mysql.createConnection(models.mysql);
 
 var access_token = null;
 
-router.get('/',(req,res) => {
+router.get('/createMenu',(req,res) => {
   console.log('start query');
   console.log('req.query=');
   console.log(req.query);
