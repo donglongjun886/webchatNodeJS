@@ -10,7 +10,10 @@ export default new Router({
     {
       path: '/',
       name: 'Reserver',
-      component: Reserver
+      component: Reserver,
+      meta: {
+        title: '预约'
+      }
     }
   ]
 })
