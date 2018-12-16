@@ -16,10 +16,13 @@
   "dependencies": {
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
+    "date-format": "^2.0.0",
     "element-ui": "^2.4.11",
+    "excel-export": "^0.5.1",
     "express": "^4.16.4",
     "moment": "^2.23.0",
     "mysql": "^2.16.0",
+    "node-excel-export": "^1.4.4",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"
   },

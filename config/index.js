@@ -59,15 +59,6 @@ module.exports = {
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {
-      '/wechat': {
-        target: 'http://47.110.90.203:3000/wechat/',
-        changeOrigin: true,
-        pathRewrite: {
-          '^/wechat': ''
-        }
-      }
-    },
 
     /**
      * Source Maps

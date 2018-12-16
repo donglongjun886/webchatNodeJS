@@ -9,6 +9,7 @@ var axios = require('axios');
 var menu = require('../wechat/menu');
 var token = require('../wechat/token');
 var reserver = require('../wechat/reserver');
+var exportUtil = require('../wechat/export')
 
 var conn = mysql.createConnection(models.mysql);
 
@@ -60,6 +61,11 @@ router.post('/api/reserver',(req,res) => {
   console.log(params);
   reserver.insertReserverInfo(conn,params);
   res.send('预约成功');
+})
+
+router.get('/api/exportReserverInfo',function (req,res){
+  console.log('query /api/exportReserverInfo');
+  exportUtil.exportReserverInfo(conn,res);
 })
 
 
