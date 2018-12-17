@@ -1,115 +1,73 @@
 <template>
-  <el-container>
-    <el-main>
-      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-        <el-form-item label="姓名" prop="user_name">
-          <el-input v-model="ruleForm.user_name"></el-input>
-        </el-form-item>
-        <el-form-item label="手机号码" prop="user_phone">
-          <el-input v-model="ruleForm.user_phone"></el-input>
-        </el-form-item>
-        <el-form-item label="预约时间" required>
-          <el-col :span="11">
-            <el-form-item prop="date1">
-              <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.date1" style="width: 100%;"></el-date-picker>
-            </el-form-item>
-          </el-col>
-          <el-col class="line" :span="2">-</el-col>
-          <el-col :span="11">
-            <el-form-item prop="date2">
-              <el-time-picker type="fixed-time" placeholder="选择时间" v-model="ruleForm.date2" style="width: 100%;"></el-time-picker>
-            </el-form-item>
-          </el-col>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleForm')">预约</el-button>
-          <el-button @click="resetForm('ruleForm')">重置</el-button>
-        </el-form-item>
-      </el-form>
-    </el-main>
-  </el-container>
+  <div ref="reserver">
+    <mt-field label="姓名" placeholder="请输入姓名" v-model="user_name"></mt-field>
+    <mt-field label="电话号码" placeholder="请输入电话号码" v-model="user_phone"></mt-field>
+    <mt-field label="预约时间" placeholder="请选择" v-model="reserver_time" @click.native="openPicker"></mt-field>
+    <mt-button size="large" type="primary" @click.native="reserveClick">预约</mt-button>
+    <mt-datetime-picker
+      v-model="pickerValue"
+      ref="picker"
+      type="datetime"
+      @confirm="handleConfirm"
+      year-format="{value} 年"
+      month-format="{value} 月"
+      date-format="{value} 日"
+      hourFormat="{value} 时"
+      minuteFormat="{value} 分">
+    </mt-datetime-picker>
+  </div>
 </template>
+
 <script>
+import moment from 'moment'
+import { Toast, MessageBox } from 'mint-ui'
 export default {
-  data () {
+  name: 'reserver',
+  data: function data () {
     return {
-      ruleForm: {
-        user_name: '',
-        user_phone: '',
-        date1: '',
-        date2: ''
-      },
-      rules: {
-        user_name: [
-          { required: true, message: '请输入姓名', trigger: 'blur' }
-        ],
-        user_phone: [
-          { required: true, message: '请输入手机号码', trigger: 'blur' }
-        ],
-        date1: [
-          { type: 'date', required: true, message: '请选择日期', trigger: 'change' }
-        ],
-        date2: [
-          { type: 'date', required: true, message: '请选择时间', trigger: 'change' }
-        ]
-      }
+      user_name: '',
+      user_phone: '',
+      pickerValue: '',
+      reserver_time: ''
     }
   },
   methods: {
-    submitForm (formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          console.log('submit reserver info')
-          var reserverTime = new Date(this.ruleForm.date1)
-          var date2 = new Date(this.ruleForm.date2)
-          console.log(date2)
-          reserverTime.setHours(date2.getHours())
-          reserverTime.setMinutes(date2.getMinutes())
-          reserverTime.setSeconds(date2.getSeconds())
-          this.$http.post('/wechat/api/reserver', {
-            openid: '80909',
-            user_name: this.ruleForm.user_name,
-            user_phone: this.ruleForm.user_phone,
-            reserver_time: reserverTime
-          })
-            .then((response) => {
-              console.log(response)
-              alert(response.data)
-            })
-            .then((error) => {
-              if (error) {
-                console.log(error)
-              }
-            })
-        } else {
-          return false
+    openPicker: function () {
+      this.$refs.picker.open()
+    },
+    handleConfirm: function () {
+      this.reserver_time = moment(this.$refs.picker.value).format('YYYY-MM-DD HH:mm:ss')
+    },
+    reserveClick: function () {
+      if (!this.user_name) {
+        MessageBox('提示', '请输入姓名')
+        return
+      }
+      if (!this.user_phone) {
+        MessageBox('提示', '请输入电话号码')
+        return
+      }
+      if (!this.reserver_time) {
+        MessageBox('提示', '请输入预约时间')
+        return
+      }
+      this.$http.post('/wechat/api/reserver', {
+        openid: '',
+        user_name: this.user_name,
+        user_phone: this.user_phone,
+        reserver_time: this.reserver_time
+      }).then((response) => {
+        console.log(response)
+        Toast({
+          message: '预约成功',
+          iconClass: 'icon icon-success'
+        })
+      }).then((error) => {
+        if (error) {
+          console.log(error)
         }
       })
-    },
-    resetForm (formName) {
-      this.$refs[formName].resetFields()
     }
   }
 }
 </script>
-
-<style>
-  .el-header, .el-footer {
-    background-color: #B3C0D1;
-    color: #333;
-    text-align: center;
-    line-height: 60px;
-  }
-
-  .el-main {
-    background-color: #E9EEF3;
-    color: #333;
-    text-align: center;
-    line-height: 160px;
-  }
-
-  body > .el-container {
-    margin-bottom: 40px;
-  }
-
-</style>
