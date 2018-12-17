@@ -9,7 +9,7 @@
       ref="picker"
       type="datetime"
       @confirm="handleConfirm"
-      year-format="{value} 年"
+      year-format="{value}"
       month-format="{value} 月"
       date-format="{value} 日"
       hourFormat="{value} 时"
@@ -27,7 +27,7 @@ export default {
     return {
       user_name: '',
       user_phone: '',
-      pickerValue: '',
+      pickerValue: new Date(),
       reserver_time: ''
     }
   },
