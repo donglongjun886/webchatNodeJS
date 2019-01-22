@@ -10,7 +10,7 @@ function createMenu(access_token){
                     {
                         "type" : "view",
                         "name" : "预约到店",
-                        "url"  : "http://www.291095.cn:8080/"
+                        "url"  : "http://www.291095.cn/"
                     }
                 ]
             }
